@@ -3,16 +3,20 @@
 ?>
 
 <main>
-    <label for="username">Username</label>
-    <input type="text" id="username" name="username">
-    <label for="bTitle">Book Title</label>
-    <input type="text" id="bTitle" name="bTitle">
-    <label for="genre">Genre</label>
-    <input type="text" id="genre" name="genre">
-    <label for="rating">Rating</label>
-    <input type="text" id="rating" name="rating">
-    <label for="rText">Review</label>
-    <textarea name="rText" id="rText" rows='10' cols='30'>Enter text review here.</textarea>
+    <h1>My Reviews</h1>
+        <?php
+            // if(!noReviews)
+            echo "<ul>";
+            for ($i = 0; $i <= 10; $i++) {
+                 echo "<li>
+                    
+                 </li>";// Need to make small list of at LEAST, Book Title, Rating, Date Submitted, Truncated Review.
+            }
+            echo "</ul>";
+            // else
+            // echo "<h3> You haven't written any reviews yet!! </h3>
+        ?>
+
 </main>
 
 <?php
