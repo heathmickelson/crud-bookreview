@@ -40,6 +40,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="reviews/index.php">Reviews</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="users/index.php">Login</a>
+                    </li>
                 </ul>
             </div>
 
