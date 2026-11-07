@@ -30,7 +30,23 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto mt-3">
+                    <li>
+                        <form action="index.php" method="GET" class="mb-4">
+                            <div class="input-group">
+                                <input 
+                                    type="text" 
+                                    name="search" 
+                                    class="form-control" 
+                                    placeholder="Search books by title..."
+                                >
+
+                                <button type="submit" class="btn btn-primary">
+                                    Search
+                                </button>
+                            </div>
+                        </form>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="index.php">Home</a>
                     </li>
@@ -45,6 +61,8 @@
                     </li>
                 </ul>
             </div>
+
+            
 
         </div>
     </nav>

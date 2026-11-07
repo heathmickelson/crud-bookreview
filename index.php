@@ -16,9 +16,22 @@
             and share your thoughts on your favorite reads.
         </p>
 
+        <h1> Check out some Books </h1>
+        <div id="highlightedBook" class="d-flex justify-content-center mt-3 mb-3">
+            <?php
+                // Select random book from DB and place relevant information
+                // $bookName
+                // $author
+                // $recentRating
+                // $recentReviewTruncated
+            ?>
+        </div>
+
         <a href="books/index.php" class="btn btn-primary">
             Browse Books
         </a>
+
+        
 
     </main>
 

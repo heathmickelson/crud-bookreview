@@ -10,7 +10,7 @@
             for ($i = 0; $i <= 10; $i++) {
                  echo "<li>
                     
-                 </li>";// Need to make small list of at LEAST, Book Title, Genre!!
+                 </li>";// Need to make small list of at LEAST, Book Title, Genre!! Options to view, edit, delete, OR Add Review
             }
             echo "</ul>";
             // else
