@@ -1,4 +1,5 @@
 <?php
+    require_once '../includes/db.php'
     require_once '../includes/header.php'
 ?>
 
@@ -10,7 +11,7 @@
             for ($i = 0; $i <= 10; $i++) {
                  echo "<li>
                     
-                 </li>";// Need to make small list of at LEAST, Book Title, Rating, Date Submitted, Truncated Review.
+                 </li>";// Need to make small list of at LEAST, Book Title, Rating, Date Submitted, Truncated Review. Add or Edit
             }
             echo "</ul>";
             // else
