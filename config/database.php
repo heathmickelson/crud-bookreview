@@ -2,8 +2,8 @@
 
 return [
     'host' => 'localhost',
-    'username' => 'root',
-    'password' => 'Super@strong2',
+    'username' => 'MYUSERNAME',
+    'password' => 'MYPASSWORD',
     'database' => 'bookstore',
     'port' => 8889
 ];
