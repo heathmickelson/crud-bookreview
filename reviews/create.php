@@ -130,7 +130,7 @@
         <?php endif; ?>
 
         <!-- 7. Display HTML form. -->
-        <form method="POST">
+        <form method="POST" class="needs-validation review-form" novalidate>
 
             <input
                 type="hidden"

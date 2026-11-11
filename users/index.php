@@ -99,7 +99,7 @@
             </div>
         <?php endif; ?>
 
-        <form method="POST">
+        <form method="POST" class="needs-validation" novalidate>
 
             <input
                 type="hidden"

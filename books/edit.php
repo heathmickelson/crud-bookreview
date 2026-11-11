@@ -152,7 +152,7 @@
 
     <?php endif; ?>
 
-    <form method="POST" action="edit.php?book_id=<?= (int) $book_id; ?>">
+    <form method="POST" action="edit.php?book_id=<?= (int) $book_id; ?>" class="needs-validation" novalidate>
 
         <input
             type="hidden"

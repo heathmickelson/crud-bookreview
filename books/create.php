@@ -16,9 +16,10 @@
     $errors = [];
 
     // Keep submitted values if validation fails.
-    $book_id = $_GET['book_id'] ?? '';
-    $rating = '';
-    $review_text = '';
+    $title = '';
+    $author = '';
+    $genre = '';
+    $publication_date = '';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -26,23 +27,6 @@
         if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             exit('Invalid form submission.');
-        }
-
-        // Retrieve submitted information.
-        $book_id = $_POST['book_id'] ?? '';
-        $rating = $_POST['rating'] ?? '';
-        $review_text = trim($_POST['review_text'] ?? '');
-
-        // Validate book ID.
-        $book_id = filter_var($book_id, FILTER_VALIDATE_INT);
-
-        if ($book_id === false || $book_id < 1) {
-            $errors[] = "Please select a valid book.";
-        }
-
-        // Validate review text.
-        if (empty($review_text)) {
-            $errors[] = "Please enter your review.";
         }
 
         // Confirm the selected book exists.
@@ -55,27 +39,15 @@
             $checkBook->execute();
             $checkBook->store_result();
 
-            if ($checkBook->num_rows === 0) {
-                $errors[] = "The selected book does not exist.";
-            }
-
             $checkBook->close();
         }
         // Validate rating.
         $rating = filter_var($rating, FILTER_VALIDATE_INT);
-
-        if ($rating === false || $rating < 1 || $rating > 5) {
-            $errors[] = "Rating must be a whole number between 1 and 5.";
-        }
+        
         $title = trim($_POST['title'] ?? '');
         $author = trim($_POST['author'] ?? '');
         $genre = trim($_POST['genre'] ?? '');
         $publication_date = trim($_POST['publication_date'] ?? '');
-
-        // Verify CSRF token.
-        if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
-            $errors[] = 'Invalid form submission. Please try again.';
-        }
 
         // Validate required fields.
         if ($title === '') {
@@ -149,7 +121,7 @@
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="create.php">
+    <form method="POST" action="create.php" class="needs-validation book-form" novalidate>
 
         <input
             type="hidden"

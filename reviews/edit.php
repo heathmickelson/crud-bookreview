@@ -158,7 +158,7 @@
                     </div>
                 <?php endif; ?>
 
-                <form method="POST">
+                <form method="POST" class="needs-validation" novalidate>
 
                     <input
                         type="hidden"
@@ -166,7 +166,6 @@
                         value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>"
                     >
 
-                    <!-- Rating -->
                     <label for="rating" class="form-label">
                         Rating (1-5)
                     </label>
