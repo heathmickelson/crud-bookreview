@@ -2,7 +2,7 @@
 <?php
 
 // Locate the private configuration file outside the document root.
-$configPath = dirname(__DIR__, 2) . '../config/database.php';
+$configPath = dirname(__DIR__) . '/config/database.php';
 
 // Load database credentials.
 $dbConfig = require $configPath;
