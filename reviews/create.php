@@ -1,39 +1,38 @@
+
 <?php
     require_once __DIR__ . '/../includes/db.php';
     require_once __DIR__ . '/../includes/auth.php';
 
     require_login();
 
+    // Get the authenticated user's ID from the session.
     $user_id = $_SESSION['user_id'];
 
     $errors = [];
 
-     // Keep submitted values if validation fails.
-    $book_id = '';
+    // Keep submitted values if validation fails.
+    $book_id = $_GET['book_id'] ?? '';
     $rating = '';
     $review_text = '';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+        // Verify CSRF token.
+        if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            exit('Invalid form submission.');
+        }
+
         // Retrieve submitted information.
         $book_id = $_POST['book_id'] ?? '';
-        $user_id = $_POST['user_id'] ?? '';
         $rating = $_POST['rating'] ?? '';
         $review_text = trim($_POST['review_text'] ?? '');
-
 
         // Validate book ID.
         $book_id = filter_var($book_id, FILTER_VALIDATE_INT);
 
         if ($book_id === false || $book_id < 1) {
             $errors[] = "Please select a valid book.";
-        }
-
-        // Validate user ID.
-        $user_id = filter_var($user_id, FILTER_VALIDATE_INT);
-
-        if ($user_id === false || $user_id < 1) {
-            $errors[] = "Please select a valid reviewer.";
         }
 
         // Validate rating.
@@ -48,7 +47,24 @@
             $errors[] = "Please enter your review.";
         }
 
+        // Confirm the selected book exists.
+        if (empty($errors)) {
+            $checkBook = $conn->prepare(
+                "SELECT book_id FROM books WHERE book_id = ?"
+            );
 
+            $checkBook->bind_param("i", $book_id);
+            $checkBook->execute();
+            $checkBook->store_result();
+
+            if ($checkBook->num_rows === 0) {
+                $errors[] = "The selected book does not exist.";
+            }
+
+            $checkBook->close();
+        }
+
+        // Save the review if validation succeeds.
         if (empty($errors)) {
 
             try {
@@ -67,7 +83,6 @@
                 );
 
                 $stmt->execute();
-
                 $stmt->close();
 
                 header("Location: index.php?created=1");
@@ -90,17 +105,11 @@
     $booksResult = $conn->query(
         "SELECT book_id, title, author FROM books ORDER BY title"
     );
-
-    // Retrieve available users.
-    $usersResult = $conn->query(
-        "SELECT user_id, full_name FROM users ORDER BY full_name"
-    );
 ?>
 
 
-<?php
-    require_once '../includes/header.php'
-?>
+
+<?php require_once __DIR__ . '/../includes/header.php'; ?>
 
 <main>
     <div class="container mx-auto">
@@ -123,6 +132,11 @@
         <!-- 7. Display HTML form. -->
         <form method="POST">
 
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>"
+            >
             <!-- Select a book. -->
             <label for="book_id" class="form-label">
                 Select a Book
@@ -192,6 +206,4 @@
     </div>
 </main>
 
-<?php
-    require_once '../includes/footer.php'
-?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>

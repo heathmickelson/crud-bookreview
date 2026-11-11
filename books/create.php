@@ -6,6 +6,8 @@
     // Only administrators can add books.
     require_login();
 
+    $user_id = $_SESSION['user_id'];
+
     if (empty($_SESSION['is_admin'])) {
         http_response_code(403);
         exit('You do not have permission to add books.');
@@ -13,13 +15,58 @@
 
     $errors = [];
 
-    $title = '';
-    $author = '';
-    $genre = '';
-    $publication_date = '';
+    // Keep submitted values if validation fails.
+    $book_id = $_GET['book_id'] ?? '';
+    $rating = '';
+    $review_text = '';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+        // Verify CSRF token.
+        if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            exit('Invalid form submission.');
+        }
+
+        // Retrieve submitted information.
+        $book_id = $_POST['book_id'] ?? '';
+        $rating = $_POST['rating'] ?? '';
+        $review_text = trim($_POST['review_text'] ?? '');
+
+        // Validate book ID.
+        $book_id = filter_var($book_id, FILTER_VALIDATE_INT);
+
+        if ($book_id === false || $book_id < 1) {
+            $errors[] = "Please select a valid book.";
+        }
+
+        // Validate review text.
+        if (empty($review_text)) {
+            $errors[] = "Please enter your review.";
+        }
+
+        // Confirm the selected book exists.
+        if (empty($errors)) {
+            $checkBook = $conn->prepare(
+                "SELECT book_id FROM books WHERE book_id = ?"
+            );
+
+            $checkBook->bind_param("i", $book_id);
+            $checkBook->execute();
+            $checkBook->store_result();
+
+            if ($checkBook->num_rows === 0) {
+                $errors[] = "The selected book does not exist.";
+            }
+
+            $checkBook->close();
+        }
+        // Validate rating.
+        $rating = filter_var($rating, FILTER_VALIDATE_INT);
+
+        if ($rating === false || $rating < 1 || $rating > 5) {
+            $errors[] = "Rating must be a whole number between 1 and 5.";
+        }
         $title = trim($_POST['title'] ?? '');
         $author = trim($_POST['author'] ?? '');
         $genre = trim($_POST['genre'] ?? '');
