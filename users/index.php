@@ -3,7 +3,7 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-    
+
     require_once __DIR__ . '/../includes/db.php';
     require_once __DIR__ . '/../includes/auth.php';
 
@@ -27,7 +27,7 @@
 
         if (empty($errors)) {
 
-            $sql = "SELECT user_id, full_name, email, password_hash
+            $sql = "SELECT user_id, full_name, email, password_hash, is_admin
                     FROM users
                     WHERE email = ?";
 
@@ -39,7 +39,8 @@
                 $user_id,
                 $full_name,
                 $stored_email,
-                $password_hash
+                $password_hash,
+                $is_admin
             );
 
             if (
@@ -57,6 +58,7 @@
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['full_name'] = $full_name;
                 $_SESSION['email'] = $stored_email;
+                $_SESSION['is_admin'] = (int) $is_admin;
 
                 // Redirect to profile.
                 header("Location: profile.php");
